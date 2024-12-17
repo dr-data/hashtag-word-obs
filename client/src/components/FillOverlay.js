@@ -13,7 +13,7 @@ const ExplodedLetter = ({ letter, index, active, isGreen }) => {
     filter: 'drop-shadow(0 0 20px rgba(0, 255, 0, 0.5))'
   } : {
     color: 'transparent',
-    WebkitTextStroke: '6px black'
+    WebkitTextStroke: '6px #f95858'
   };
   
   return (
@@ -79,7 +79,7 @@ const FillOverlay = () => {
     const newPercentage = (1 - Math.exp(-x/k)) * 100;
     setFillPercentage(Math.min(newPercentage, 100));
 
-    if (newPercentage >= 90 && !isExploded) {
+    if (newPercentage >= 75 && !isExploded) {
       setIsExploded(true);
     }
   }, [messages, isExploded]);
@@ -100,9 +100,13 @@ const FillOverlay = () => {
 
   const baseStyle = {
     fontSize: '12rem',
+    fontFamily: '"Russo One", sans-serif',  // Using Russo One font
     fontWeight: 'bold',
     color: 'transparent',
-    WebkitTextStroke: '6px black'
+    WebkitTextStroke: '4px #f95858',
+    WebkitTextFillColor: 'transparent',
+    letterSpacing: '0.05em',
+    filter: 'drop-shadow(2px 2px 0 #f95858) drop-shadow(-2px -2px 0 #f95858) drop-shadow(-2px 2px 0 #f95858) drop-shadow(2px -2px 0 #f95858)'
   };
 
   const animationStyle = !isExploded ? {
@@ -145,13 +149,15 @@ const FillOverlay = () => {
                 clipPath: `inset(${100 - fillPercentage}% 0 0 0)`,
                 transition: 'clip-path 0.3s ease-in-out',
                 willChange: 'clip-path',
-                transform: 'translateX(-4px)'  // Adjust this value to align perfectly
+                transform: 'translateX(-6px)'  // Adjust this value to align perfectly
               }}
             >
               <div style={{
                 ...baseStyle,
-                color: '#00ff00',
                 WebkitTextStroke: 'none',
+                WebkitTextFillColor: '#00ff00',
+                color: '#00ff00',
+                filter: 'drop-shadow(0 0 10px rgba(0, 255, 0, 0.5))',
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
@@ -171,7 +177,7 @@ const FillOverlay = () => {
       
       {/* Control Panel */}
       <div className="absolute bottom-4 left-0 right-0 flex items-center justify-center gap-4">
-        <div className="text-black font-bold text-xl bg-white/50 px-4 py-2 rounded">
+        <div className="text-#f95858 font-bold text-xl bg-white/50 px-4 py-2 rounded">
           Count: {messages.length} | Fill: {fillPercentage.toFixed(1)}%
         </div>
         

@@ -1,0 +1,8 @@
+@font-face {
+    font-family: 'Outline';
+    src: url('https://fonts.cdnfonts.com/css/outline-wide') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  @import url('https://fonts.cdnfonts.com/css/outline-wide');

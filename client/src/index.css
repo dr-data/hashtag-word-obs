@@ -2,17 +2,100 @@
 @tailwind components;
 @tailwind utilities;
 
-.text-8xl {
-  font-size: 6rem;
-  text-shadow: 
-    -1px -1px 0 #f95858,
-    1px -1px 0 #f95858,
-    -1px 1px 0 #f95858,
-    1px 1px 0 #f95858,
-    -2px -2px 0 #f95858,
-    2px -2px 0 #f95858,
-    -2px 2px 0 #f95858,
-    2px 2px 0 #f95858;
-  color: transparent;
-  -webkit-text-stroke: 5px #f95858;
+@import url('https://fonts.googleapis.com/css2?family=Russo+One&display=swap');
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Russo One', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
+#root {
+  height: 100vh;
+}
+
+.ready-text {
+  font-size: 12rem;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+  -webkit-text-stroke: 4px black;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(2px 2px 0 black) 
+         drop-shadow(-2px -2px 0 black) 
+         drop-shadow(-2px 2px 0 black) 
+         drop-shadow(2px -2px 0 black);
+}
+
+.ready-text-fill {
+  -webkit-text-stroke: none;
+  -webkit-text-fill-color: #00ff00;
+  color: #00ff00;
+  filter: drop-shadow(0 0 10px rgba(0, 255, 0, 0.5));
+}
+
+@keyframes constant-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(var(--shake-intensity)); }
+  75% { transform: translateX(calc(var(--shake-intensity) * -1)); }
+}
+
+@keyframes pulse-shake {
+  0%, 100% { transform: translateX(0) rotate(0); }
+  25% { transform: translateX(-15px) rotate(-1deg); }
+  75% { transform: translateX(15px) rotate(1deg); }
+}
+
+.ready-container {
+  --shake-intensity: 2px;
+  animation: constant-shake 0.15s ease-in-out infinite;
+  will-change: transform;
+}
+
+.ready-container.pulse {
+  animation: pulse-shake 0.15s ease-in-out;
+}
+
+.fill-overlay {
+  clip-path: inset(var(--fill-percentage) 0 0 0);
+  transition: clip-path 0.3s ease-in-out;
+  will-change: clip-path;
+}
+
+.letter-container {
+  display: inline-block;
+  position: relative;
+}
+
+.exploded-letter {
+  display: inline-block;
+  transition: transform 1s ease-out, opacity 1s ease-out;
+}
+
+.exploded-letter.active {
+  opacity: 0;
+}
+
+.exploded-letter.green {
+  -webkit-text-fill-color: #00ff00;
+  color: #00ff00;
+  filter: drop-shadow(0 0 10px rgba(0, 255, 0, 0.5));
+}
+
+.control-panel {
+  @apply absolute bottom-4 left-0 right-0 flex items-center justify-center gap-4;
+}
+
+.count-display {
+  @apply text-black font-bold text-xl bg-white/50 px-4 py-2 rounded;
+}
+
+.test-button {
+  @apply bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition-colors;
+}
+
+.reset-button {
+  @apply bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition-colors;
 }

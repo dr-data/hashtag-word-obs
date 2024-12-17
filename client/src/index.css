@@ -5,8 +5,29 @@
 @import url('https://fonts.googleapis.com/css2?family=Russo+One&display=swap');
 
 :root {
-  --outline-color: black;      /* Change this to change outline color */
-  --fill-color: #00ff00;      /* Change this to change fill color */
+  /* Colors */
+  --outline-color: rgb(255, 255, 255);
+  --fill-color: #ff0329;
+  
+  /* Text properties */
+  --stroke-width: 2px;
+  --text-size: 12rem;
+  --letter-spacing: 0.05em;
+  
+  /* Shadow properties */
+  --shadow-offset: 2px;
+  --shadow-spread: 0;
+  --shadow-opacity: 1;
+  
+  /* Fill glow effect */
+  --fill-glow-size: 10px;
+  --fill-glow-opacity: 0.5;
+  
+  /* Animation properties */
+  --shake-base: 2px;
+  --pulse-intensity: 15px;
+  --pulse-rotation: 1deg;
+  --shake-speed: 0.15s;
 }
 
 body {
@@ -23,22 +44,22 @@ body {
 }
 
 .ready-text {
-  font-size: 12rem;
+  font-size: var(--text-size);
   font-weight: bold;
-  letter-spacing: 0.05em;
-  -webkit-text-stroke: 4px var(--outline-color);
+  letter-spacing: var(--letter-spacing);
+  -webkit-text-stroke: var(--stroke-width) var(--outline-color);
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(2px 2px 0 var(--outline-color)) 
-         drop-shadow(-2px -2px 0 var(--outline-color)) 
-         drop-shadow(-2px 2px 0 var(--outline-color)) 
-         drop-shadow(2px -2px 0 var(--outline-color));
+  filter: drop-shadow(var(--shadow-offset) var(--shadow-offset) var(--shadow-spread) rgba(var(--outline-color), var(--shadow-opacity))) 
+         drop-shadow(calc(var(--shadow-offset) * -1) calc(var(--shadow-offset) * -1) var(--shadow-spread) rgba(var(--outline-color), var(--shadow-opacity)))
+         drop-shadow(calc(var(--shadow-offset) * -1) var(--shadow-offset) var(--shadow-spread) rgba(var(--outline-color), var(--shadow-opacity)))
+         drop-shadow(var(--shadow-offset) calc(var(--shadow-offset) * -1) var(--shadow-spread) rgba(var(--outline-color), var(--shadow-opacity)));
 }
 
 .ready-text-fill {
   -webkit-text-stroke: none;
   -webkit-text-fill-color: var(--fill-color);
   color: var(--fill-color);
-  filter: drop-shadow(0 0 10px rgba(0, 255, 0, 0.5));
+  filter: drop-shadow(0 0 var(--fill-glow-size) rgba(0, 255, 0, var(--fill-glow-opacity)));
 }
 
 @keyframes constant-shake {
@@ -49,18 +70,18 @@ body {
 
 @keyframes pulse-shake {
   0%, 100% { transform: translateX(0) rotate(0); }
-  25% { transform: translateX(-15px) rotate(-1deg); }
-  75% { transform: translateX(15px) rotate(1deg); }
+  25% { transform: translateX(calc(var(--pulse-intensity) * -1)) rotate(calc(var(--pulse-rotation) * -1)); }
+  75% { transform: translateX(var(--pulse-intensity)) rotate(var(--pulse-rotation)); }
 }
 
 .ready-container {
-  --shake-intensity: 2px;
-  animation: constant-shake 0.15s ease-in-out infinite;
+  --shake-intensity: var(--shake-base);
+  animation: constant-shake var(--shake-speed) ease-in-out infinite;
   will-change: transform;
 }
 
 .ready-container.pulse {
-  animation: pulse-shake 0.15s ease-in-out;
+  animation: pulse-shake var(--shake-speed) ease-in-out;
 }
 
 .fill-overlay {
@@ -86,7 +107,7 @@ body {
 .exploded-letter.green {
   -webkit-text-fill-color: var(--fill-color);
   color: var(--fill-color);
-  filter: drop-shadow(0 0 10px rgba(0, 255, 0, 0.5));
+  filter: drop-shadow(0 0 var(--fill-glow-size) rgba(0, 255, 0, var(--fill-glow-opacity)));
 }
 
 .control-panel {

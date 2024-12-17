@@ -157,5 +157,4 @@ MIT License - Feel free to modify and use in your streams!
 For issues and feature requests, please open an issue on the GitHub repository or contact [your-contact-info].
 
 ## Contributing
-
 Contributions are welcome! Please feel free to submit a Pull Request.

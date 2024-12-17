@@ -1,11 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const ExplodedLetter = ({ letter, index, active }) => {
+const ExplodedLetter = ({ letter, index, active, isGreen }) => {
   if (!active) return <span>{letter}</span>;
   
   const randomAngle = Math.random() * 360;
   const randomDistance = 200 + Math.random() * 400;
   const delay = index * 50;
+  
+  const letterStyle = isGreen ? {
+    color: '#00ff00',
+    WebkitTextStroke: '6px #00ff00',
+    filter: 'drop-shadow(0 0 20px rgba(0, 255, 0, 0.5))'
+  } : {
+    color: 'transparent',
+    WebkitTextStroke: '6px black'
+  };
   
   return (
     <span
@@ -13,7 +22,8 @@ const ExplodedLetter = ({ letter, index, active }) => {
         display: 'inline-block',
         transform: active ? `translate(${Math.cos(randomAngle) * randomDistance}px, ${Math.sin(randomAngle) * randomDistance}px) rotate(${randomAngle}deg)` : 'none',
         transition: `transform 1s ease-out ${delay}ms, opacity 1s ease-out ${delay}ms`,
-        opacity: active ? 0 : 1
+        opacity: active ? 0 : 1,
+        ...letterStyle
       }}
     >
       {letter}
@@ -26,7 +36,6 @@ const FillOverlay = () => {
   const [messages, setMessages] = useState([]);
   const [isExploded, setIsExploded] = useState(false);
   const wsRef = useRef(null);
-  const animationFrameRef = useRef();
 
   useEffect(() => {
     wsRef.current = new WebSocket(`ws://${window.location.host}`);
@@ -60,31 +69,18 @@ const FillOverlay = () => {
       if (wsRef.current) {
         wsRef.current.close();
       }
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-      }
     };
   }, []);
 
   // Exponential fill calculation
   useEffect(() => {
-    const k = 15;
+    const k = 18;
     const x = messages.length;
     const newPercentage = (1 - Math.exp(-x/k)) * 100;
     setFillPercentage(Math.min(newPercentage, 100));
 
-    // Trigger explosion at 90%
-    if (newPercentage >= 75 && !isExploded) {
+    if (newPercentage >= 90 && !isExploded) {
       setIsExploded(true);
-      
-      // Add shake animation
-      const container = document.querySelector('.ready-container');
-      if (container) {
-        container.classList.add('shake');
-        setTimeout(() => {
-          container.classList.remove('shake');
-        }, 1000);
-      }
     }
   }, [messages, isExploded]);
 
@@ -100,22 +96,11 @@ const FillOverlay = () => {
     }
   };
 
-  // Split "READY!" into individual letters
   const letters = "READY!".split("");
 
-  const textStyle = {
+  const baseStyle = {
     fontSize: '12rem',
     fontWeight: 'bold',
-    textShadow: `
-      -2px -2px 0 #000,
-      2px -2px 0 #000,
-      -2px 2px 0 #000,
-      2px 2px 0 #000,
-      -4px -4px 0 #000,
-      4px -4px 0 #000,
-      -4px 4px 0 #000,
-      4px 4px 0 #000
-    `,
     color: 'transparent',
     WebkitTextStroke: '6px black'
   };
@@ -134,13 +119,20 @@ const FillOverlay = () => {
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="ready-container relative" style={animationStyle}>
           {/* Base text with outline */}
-          <div className="relative" style={textStyle}>
+          <div className="relative" style={{
+            ...baseStyle,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100%'
+          }}>
             {letters.map((letter, index) => (
               <ExplodedLetter
                 key={index}
                 letter={letter}
                 index={index}
                 active={isExploded}
+                isGreen={isExploded}
               />
             ))}
           </div>
@@ -148,21 +140,28 @@ const FillOverlay = () => {
           {/* Fill overlay */}
           {!isExploded && (
             <div 
-              className="absolute inset-0 overflow-hidden"
+              className="absolute inset-0"
               style={{
                 clipPath: `inset(${100 - fillPercentage}% 0 0 0)`,
                 transition: 'clip-path 0.3s ease-in-out',
-                willChange: 'clip-path'
+                willChange: 'clip-path',
+                transform: 'translateX(-4px)'  // Adjust this value to align perfectly
               }}
             >
-              <div               style={{
-                ...textStyle,
+              <div style={{
+                ...baseStyle,
                 color: '#00ff00',
-                WebkitTextStroke: '6px #00ff00',
-                filter: 'drop-shadow(0 0 20px rgba(0, 255, 0, 0.5))'
+                WebkitTextStroke: 'none',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100%'
               }}>
                 {letters.map((letter, index) => (
-                  <span key={index}>{letter}</span>
+                  <span key={index} style={{
+                    display: 'inline-block',
+                    position: 'relative'
+                  }}>{letter}</span>
                 ))}
               </div>
             </div>

@@ -4,6 +4,11 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Russo+One&display=swap');
 
+:root {
+  --outline-color: black;      /* Change this to change outline color */
+  --fill-color: #00ff00;      /* Change this to change fill color */
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -21,18 +26,18 @@ body {
   font-size: 12rem;
   font-weight: bold;
   letter-spacing: 0.05em;
-  -webkit-text-stroke: 4px black;
+  -webkit-text-stroke: 4px var(--outline-color);
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(2px 2px 0 black) 
-         drop-shadow(-2px -2px 0 black) 
-         drop-shadow(-2px 2px 0 black) 
-         drop-shadow(2px -2px 0 black);
+  filter: drop-shadow(2px 2px 0 var(--outline-color)) 
+         drop-shadow(-2px -2px 0 var(--outline-color)) 
+         drop-shadow(-2px 2px 0 var(--outline-color)) 
+         drop-shadow(2px -2px 0 var(--outline-color));
 }
 
 .ready-text-fill {
   -webkit-text-stroke: none;
-  -webkit-text-fill-color: #00ff00;
-  color: #00ff00;
+  -webkit-text-fill-color: var(--fill-color);
+  color: var(--fill-color);
   filter: drop-shadow(0 0 10px rgba(0, 255, 0, 0.5));
 }
 
@@ -79,8 +84,8 @@ body {
 }
 
 .exploded-letter.green {
-  -webkit-text-fill-color: #00ff00;
-  color: #00ff00;
+  -webkit-text-fill-color: var(--fill-color);
+  color: var(--fill-color);
   filter: drop-shadow(0 0 10px rgba(0, 255, 0, 0.5));
 }
 
